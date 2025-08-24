@@ -1,35 +1,27 @@
+// tests/test_0001_two_sum_catch2.cpp
 #include "../../src/problems/0001_two_sum/solution.hpp"
-#include <cassert>
-#include <iostream>
-using namespace std;
 
-void test_two_sum() {
+// Catch2 v3 断言与 TEST_CASE 宏
+#include <catch2/catch_test_macros.hpp>
+
+TEST_CASE("0001 two sum basic cases", "[two_sum]") {
   Solution sol;
 
-  // 测试用例1
-  vector<int> nums1 = {2, 7, 11, 15};
-  int target1 = 9;
-  vector<int> result1 = sol.twoSum(nums1, target1);
-  assert(result1 == vector<int>({0, 1}));
-  cout << "Test 1 passed!" << endl;
+  SECTION("case1: [2,7,11,15], target=9 -> [0,1]") {
+    std::vector<int> nums = {2, 7, 11, 15};
+    auto res = sol.twoSum(nums, 9);
+    REQUIRE(res == std::vector<int>({0, 1}));
+  }
 
-  // 测试用例2
-  vector<int> nums2 = {3, 2, 4};
-  int target2 = 6;
-  vector<int> result2 = sol.twoSum(nums2, target2);
-  assert(result2 == vector<int>({1, 2}));
-  cout << "Test 2 passed!" << endl;
+  SECTION("case2: [3,2,4], target=6 -> [1,2]") {
+    std::vector<int> nums = {3, 2, 4};
+    auto res = sol.twoSum(nums, 6);
+    REQUIRE(res == std::vector<int>({1, 2}));
+  }
 
-  // 测试用例3
-  vector<int> nums3 = {3, 3};
-  int target3 = 6;
-  vector<int> result3 = sol.twoSum(nums3, target3);
-  assert(result3 == vector<int>({0, 1}));
-  cout << "Test 3 passed!" << endl;
-}
-
-int main() {
-  test_two_sum();
-  cout << "All tests passed!" << endl;
-  return 0;
+  SECTION("case3: [3,3], target=6 -> [0,1]") {
+    std::vector<int> nums = {3, 3};
+    auto res = sol.twoSum(nums, 6);
+    REQUIRE(res == std::vector<int>({0, 1}));
+  }
 }
