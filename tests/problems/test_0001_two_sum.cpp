@@ -1,4 +1,4 @@
-#include "../../src/problems/001_two_sum/solution.hpp"
+#include "../../src/problems/0001_two_sum/solution.hpp"
 #include <cassert>
 #include <iostream>
 using namespace std;
