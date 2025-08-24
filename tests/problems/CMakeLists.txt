@@ -1,18 +1,4 @@
 include(CTest)                       # 开启 CTest 集成
-include(FetchContent)                # 用于拉取 Catch2
-
-# ----- 获取 Catch2 v3（推荐固定一个稳定 tag）-----
-FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.6.0
-)
-FetchContent_MakeAvailable(Catch2)   # 提供 Catch2::Catch2 / ::Catch2WithMain 以及 Catch.cmake
-
-# 可选：让测试“在运行前”再做一次发现（对某些生成器更稳）
-# 需在第一次调用 catch_discover_tests 之前设置
-set(CMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
-include(Catch)  # 来自 Catch2，提供 catch_discover_tests
 
 # 自动发现当前目录下所有测试源文件
 file(GLOB TEST_FILES *.cpp)
@@ -37,31 +23,9 @@ foreach(TEST_FILE ${TEST_FILES})
         message(WARNING "Library ${PROBLEM_LIB_NAME} not found for test ${TEST_NAME}")
     endif()
 
-    # 链接 Catch2（使用带 main 的目标，测试文件里无需自定义 main）
-    target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain)
+    # 链接 GTest（使用带 main 的目标，测试文件里无需自定义 main）
+    target_link_libraries(${TEST_NAME} PRIVATE gtest_main)
 
-    # 让 CTest 自动把每个 TEST_CASE 注册为独立测试
-    # --- (A) 注册“单元测试” ---
-    catch_discover_tests(${TEST_NAME}
-        TEST_PREFIX "${TEST_NAME}::"   # 测试名前缀（便于区分不同文件）
-        # 可选：输出格式、工作目录等高级参数见文档
-        # REPORTER junit OUTPUT_DIR ${CMAKE_BINARY_DIR}/test-reports OUTPUT_SUFFIX .xml
-        # 如需固定 reporter，可额外加：EXTRA_ARGS -r console
-    )
-
-    # --- (B) 注册“基准测试”（可选，默认不启用） ---
-    if(ENABLE_BENCHMARKS)
-        # 通过 tag 表达式只运行带 [!benchmark] 的用例
-        add_test(NAME ${TEST_NAME}.bench
-        COMMAND ${TEST_NAME} "[!benchmark]"
-                --benchmark-samples=50
-                --benchmark-resamples=100
-                --benchmark-warmup-time=100ms
-        )
-        # 给基准打上 label，并串行执行以减少抖动
-        set_tests_properties(${TEST_NAME}.bench PROPERTIES
-        LABELS "benchmark"
-        RUN_SERIAL TRUE
-        )
-    endif()
+    # 让 CTest 自动发现测试
+    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endforeach()
