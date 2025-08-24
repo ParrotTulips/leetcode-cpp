@@ -1,3 +1,15 @@
+include(CTest)
+# Enable testing and fetch GTest
+enable_testing()
+include(FetchContent)
+
+# Fetch and make GTest available
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.17.x
+)
+FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 # 自动发现当前目录下所有测试源文件
 file(GLOB TEST_FILES *.cpp)
@@ -26,8 +38,5 @@ foreach(TEST_FILE ${TEST_FILES})
     else()
         message(WARNING "Library ${PROBLEM_LIB_NAME} not found for test ${TEST_NAME}")
     endif()
-
-
-
 
 endforeach()

@@ -12,18 +12,6 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # Set output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Enable testing and fetch GTest
-enable_testing()
-include(FetchContent)
-
-# Fetch and make GTest available
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG v1.17.x
-)
-FetchContent_MakeAvailable(googletest)
-
 # Add problems subdirectory - it will automatically discover all problems
 add_subdirectory(src/problems)
 
