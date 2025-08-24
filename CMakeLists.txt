@@ -12,7 +12,6 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # Set output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-enable_testing()
 # Add problems subdirectory - it will automatically discover all problems
 add_subdirectory(src/problems)
 

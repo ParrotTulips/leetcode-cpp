@@ -1,19 +1,16 @@
-include(CTest)                       # 开启 CTest 集成
-include(FetchContent)                # 用于拉取 Catch2
+include(CTest)
+# Enable testing and fetch GTest
+enable_testing()
+include(FetchContent)
 
-# ----- 获取 Catch2 v3（推荐固定一个稳定 tag）-----
+# Fetch and make GTest available
 FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.6.0
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.17.x
 )
-FetchContent_MakeAvailable(Catch2)   # 提供 Catch2::Catch2 / ::Catch2WithMain 以及 Catch.cmake
-
-# 可选：让测试“在运行前”再做一次发现（对某些生成器更稳）
-# 需在第一次调用 catch_discover_tests 之前设置
-set(CMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
-include(Catch)  # 来自 Catch2，提供 catch_discover_tests
-
+FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
 # 自动发现当前目录下所有测试源文件
 file(GLOB TEST_FILES *.cpp)
 
@@ -31,37 +28,15 @@ foreach(TEST_FILE ${TEST_FILES})
     set(PROBLEM_LIB_NAME "leetcode_${PROBLEM_NAME}")
     if(TARGET ${PROBLEM_LIB_NAME})
         target_link_libraries(${TEST_NAME} PRIVATE ${PROBLEM_LIB_NAME})
+         # 链接 GTest（使用带 main 的目标，测试文件里无需自定义 main）
+        target_link_libraries(${TEST_NAME} PRIVATE gtest_main)
         target_include_directories(${TEST_NAME} PRIVATE
             ${CMAKE_SOURCE_DIR}/src/problems/${PROBLEM_NAME})
+
+        # 让 CTest 自动发现测试
+        gtest_discover_tests(${TEST_NAME})
     else()
         message(WARNING "Library ${PROBLEM_LIB_NAME} not found for test ${TEST_NAME}")
     endif()
 
-    # 链接 Catch2（使用带 main 的目标，测试文件里无需自定义 main）
-    target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain)
-
-    # 让 CTest 自动把每个 TEST_CASE 注册为独立测试
-    # --- (A) 注册“单元测试” ---
-    catch_discover_tests(${TEST_NAME}
-        TEST_PREFIX "${TEST_NAME}::"   # 测试名前缀（便于区分不同文件）
-        # 可选：输出格式、工作目录等高级参数见文档
-        # REPORTER junit OUTPUT_DIR ${CMAKE_BINARY_DIR}/test-reports OUTPUT_SUFFIX .xml
-        # 如需固定 reporter，可额外加：EXTRA_ARGS -r console
-    )
-
-    # --- (B) 注册“基准测试”（可选，默认不启用） ---
-    if(ENABLE_BENCHMARKS)
-        # 通过 tag 表达式只运行带 [!benchmark] 的用例
-        add_test(NAME ${TEST_NAME}.bench
-        COMMAND ${TEST_NAME} "[!benchmark]"
-                --benchmark-samples=50
-                --benchmark-resamples=100
-                --benchmark-warmup-time=100ms
-        )
-        # 给基准打上 label，并串行执行以减少抖动
-        set_tests_properties(${TEST_NAME}.bench PROPERTIES
-        LABELS "benchmark"
-        RUN_SERIAL TRUE
-        )
-    endif()
 endforeach()
