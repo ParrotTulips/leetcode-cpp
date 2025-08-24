@@ -1,0 +1,5 @@
+add_executable(test_002_add_two_numbers test_002_add_two_numbers.cpp)
+target_link_libraries(test_002_add_two_numbers leetcode_002_add_two_numbers)
+target_include_directories(test_002_add_two_numbers PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/problems/002_add_two_numbers
+)
