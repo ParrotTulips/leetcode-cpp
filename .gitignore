@@ -39,6 +39,7 @@ Makefile
 
 # IDE files
 .vscode/
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
