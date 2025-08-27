@@ -1,10 +1,12 @@
-#include "../../src/problems/0001_two_sum/solution.hpp"
-#include <chrono>
 #include <gtest/gtest.h>
+
+#include <chrono>
 #include <random>
 
+#include "../../src/problems/0001_two_sum/solution.hpp"
+
 class TwoSumTest : public ::testing::Test {
-protected:
+ protected:
   Solution sol;
 };
 
@@ -28,7 +30,7 @@ TEST_F(TwoSumTest, BasicCases) {
 
 // 基准测试类
 class TwoSumBenchmark : public ::testing::Test {
-protected:
+ protected:
   Solution sol;
 
   // 生成测试数据
@@ -90,7 +92,7 @@ TEST_F(TwoSumBenchmark, VariousSizes) {
       std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
   // 输出结果（在测试中我们只验证函数能正常运行）
-  EXPECT_TRUE(true); // 基准测试主要关注性能，这里只验证功能正常
+  EXPECT_TRUE(true);  // 基准测试主要关注性能，这里只验证功能正常
 
   // 可选：输出性能数据到控制台
   std::cout << "Benchmark results:" << std::endl;
