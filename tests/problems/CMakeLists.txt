@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(googletest)
 
 include(GoogleTest)
 
-# 自动发现当前目录下所有测试源文件
+# Automatically discover all test source files in current directory
 file(GLOB TEST_FILES *.cpp)
 
 foreach(TEST_FILE ${TEST_FILES})
@@ -20,14 +20,14 @@ foreach(TEST_FILE ${TEST_FILES})
     # e.g. test_0001_two_sum -> 0001_two_sum
     string(REGEX REPLACE "^test_(.+)$" "\\1" PROBLEM_NAME ${TEST_NAME})
 
-    # 为这个测试编译一个可执行文件
+    # Compile an executable for this test
     add_executable(${TEST_NAME} ${TEST_FILE})
 
-    # 链接对应题目的被测库（若存在）
+    # Link the corresponding problem library (if exists)
     set(PROBLEM_LIB_NAME "leetcode_${PROBLEM_NAME}")
     if(TARGET ${PROBLEM_LIB_NAME})
         target_link_libraries(${TEST_NAME} PRIVATE ${PROBLEM_LIB_NAME})
-         # 链接 GTest（使用带 main 的目标，测试文件里无需自定义 main）
+         # Link GTest (using target with main, no need to define main in test files)
         target_link_libraries(${TEST_NAME} PRIVATE gtest_main)
 
         target_include_directories(${TEST_NAME} PRIVATE

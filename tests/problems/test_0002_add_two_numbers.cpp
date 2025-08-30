@@ -4,7 +4,7 @@
 
 #include "../../src/problems/0002_add_two_numbers/solution.hpp"
 
-// 仅供测试的链表工具
+// Linked list utilities for testing only
 static ListNode* createList(const std::vector<int>& vals) {
   ListNode dummy(0);
   ListNode* curr = &dummy;
@@ -60,7 +60,7 @@ TEST_F(AddTwoNumbersTest, ZeroCase) {
 }
 
 TEST_F(AddTwoNumbersTest, LongCarryCase) {
-  // case3: 长进位 [9,9,9,9,9,9,9] + [9,9,9,9] -> [8,9,9,9,0,0,0,1]
+  // case3: Long carry [9,9,9,9,9,9,9] + [9,9,9,9] -> [8,9,9,9,0,0,0,1]
   ListNode* l1 = createList({9, 9, 9, 9, 9, 9, 9});
   ListNode* l2 = createList({9, 9, 9, 9});
   ListNode* result = sol.addTwoNumbers(l1, l2);

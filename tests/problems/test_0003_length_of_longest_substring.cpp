@@ -49,4 +49,4 @@ TEST_F(LongestSubstringTest, MixedPrefixSuffix) {
   EXPECT_EQ(sol.lengthOfLongestSubstring("abcdefabcbb"), 6);
 }
 
-// main 函数由 GTest 提供，一般无需手动实现
+// main function is provided by GTest, usually no need to implement manually

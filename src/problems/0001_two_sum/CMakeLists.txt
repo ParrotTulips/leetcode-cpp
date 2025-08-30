@@ -1,7 +1,7 @@
-# 获取当前目录名
+# Get current directory name
 get_filename_component(DIR_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
-# 创建库名：leetcode_ + 目录名
+# Create library name: leetcode_ + directory name
 add_library(leetcode_${DIR_NAME}
     solution.cpp
 )

@@ -5,14 +5,14 @@
 int Solution::lengthOfLongestSubstring(const std::string& s) {
   std::unordered_map<char, int> charIndexMap;
   int maxLength = 0;
-  int start = 0;  // 当前无重复子串的起始位置
+  int start = 0;  // Start position of current non-repeating substring
 
   for (int i = 0; i < s.size(); ++i) {
     if (charIndexMap.count(s[i]) && charIndexMap[s[i]] >= start) {
-      start = charIndexMap[s[i]] + 1;  // 更新起始位置
+      start = charIndexMap[s[i]] + 1;  // Update start position
     }
-    charIndexMap[s[i]] = i;                          // 更新字符最后出现的位置
-    maxLength = std::max(maxLength, i - start + 1);  // 更新最大长度
+    charIndexMap[s[i]] = i;  // Update last occurrence position of character
+    maxLength = std::max(maxLength, i - start + 1);  // Update maximum length
   }
 
   return maxLength;
